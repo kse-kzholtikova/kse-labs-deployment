@@ -1,0 +1,13 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: soap-demo
+  namespace: applications
+spec:
+  selector:
+    app.kubernetes.io/name: soap-demo
+  ports:
+    - name: http
+      port: 80
+      targetPort: http
+      protocol: TCP

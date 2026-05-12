@@ -1,0 +1,24 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: grpc-demo
+  namespace: applications
+  annotations:
+    cert-manager.io/cluster-issuer: vault-pki-int
+spec:
+  ingressClassName: nginx
+  tls:
+    - hosts:
+        - grpc-demo.192.168.50.10.nip.io
+      secretName: grpc-demo-tls
+  rules:
+    - host: grpc-demo.192.168.50.10.nip.io
+      http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: grpc-demo
+                port:
+                  number: 80
