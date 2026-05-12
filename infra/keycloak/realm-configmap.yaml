@@ -1,0 +1,49 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: keycloak-realm-import
+data:
+  api-security-realm.json: |
+    {
+      "realm": "api-security",
+      "enabled": true,
+      "registrationAllowed": false,
+      "loginWithEmailAllowed": true,
+      "resetPasswordAllowed": true,
+      "bruteForceProtected": true,
+      "clients": [
+        {
+          "clientId": "spa-token-demo",
+          "enabled": true,
+          "publicClient": true,
+          "standardFlowEnabled": true,
+          "directAccessGrantsEnabled": true,
+          "rootUrl": "http://spa-token-demo.192.168.50.10.nip.io",
+          "redirectUris": [
+            "http://spa-token-demo.192.168.50.10.nip.io/*",
+            "http://localhost:3000/*"
+          ],
+          "webOrigins": [
+            "http://spa-token-demo.192.168.50.10.nip.io",
+            "http://localhost:3000"
+          ],
+          "protocol": "openid-connect"
+        }
+      ],
+      "users": [
+        {
+          "username": "student",
+          "enabled": true,
+          "email": "student@example.com",
+          "firstName": "Lab",
+          "lastName": "Student",
+          "credentials": [
+            {
+              "type": "password",
+              "value": "student",
+              "temporary": false
+            }
+          ]
+        }
+      ]
+    }

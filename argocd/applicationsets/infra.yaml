@@ -18,8 +18,6 @@ spec:
             exclude: true
           - path: infra/gatekeeper-policy-manager
             exclude: true
-          - path: infra/keycloak
-            exclude: true
   template:
     metadata:
       name: 'infra-{{path.basename}}'
