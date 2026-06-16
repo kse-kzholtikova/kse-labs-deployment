@@ -62,7 +62,7 @@ data:
 
     echo ">> create role 'cluster-services'"
     vault write pki_int/roles/cluster-services \
-      allowed_domains="svc,svc.cluster.local,cluster.local,gatekeeper,image-policy-provider" \
+      allowed_domains="svc,svc.cluster.local,cluster.local,gatekeeper,image-policy-provider,192.168.50.10.nip.io" \
       allow_subdomains=true \
       allow_bare_domains=true \
       allow_glob_domains=true \
