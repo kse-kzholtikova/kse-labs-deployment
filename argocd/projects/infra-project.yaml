@@ -6,7 +6,8 @@ metadata:
 spec:
   description: Infrastructure components
   sourceRepos:
-    - https://github.com/kse-kzholtikova/kse-labs-deployment.git
+    - https://github.com/kse-bd8338bbe006/kse-labs-deployment.git
+    - https://charts.goauthentik.io
   destinations:
     - namespace: '*'
       server: https://kubernetes.default.svc
