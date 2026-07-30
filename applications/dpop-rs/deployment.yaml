@@ -36,6 +36,15 @@ spec:
               value: https://keycloak.192.168.50.10.nip.io/realms/api-security
             - name: PUBLIC_BASE_URL
               value: https://dpop-rs.192.168.50.10.nip.io
+            # Multipass's bundled qemu mis-virtualizes an ARMv9 instruction that
+            # OpenSSL selects at runtime -> SIGILL on the qemu VMs (but not native
+            # M4). Disable OpenSSL's ARM-optimized code paths to avoid it.
+            - name: OPENSSL_armcap
+              value: "0"
+            # Root FS is read-only; point gunicorn's control socket at the
+            # writable /tmp emptyDir instead of $HOME (/.gunicorn).
+            - name: HOME
+              value: /tmp
           securityContext:
             readOnlyRootFilesystem: true
             allowPrivilegeEscalation: false
