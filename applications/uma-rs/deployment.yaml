@@ -26,7 +26,7 @@ spec:
       containers:
         - name: uma-rs
           # CI (uma-rs repo) builds this tag; bump it to redeploy a new build.
-          image: ghcr.io/kse-bd8338bbe006/uma-rs:75ca309276f48d371932f7bc5a205c4f93894f81
+          image: ghcr.io/kse-kzholtikova/uma-rs:553cc746b637a45c756468484a58df968b4bdb25
           ports:
             - name: http
               containerPort: 8000
@@ -42,6 +42,15 @@ spec:
               value: uma-photo-rs-secret-lab-2026
             - name: RESOURCE_NAME
               value: Photo Album
+            # Multipass's bundled qemu mis-virtualizes an ARMv9 instruction that
+            # OpenSSL selects at runtime -> SIGILL on the qemu VMs. Disable
+            # OpenSSL's ARM-optimized code paths to avoid it.
+            - name: OPENSSL_armcap
+              value: "0"
+            # Root FS is read-only; point gunicorn's control socket at the
+            # writable /tmp emptyDir instead of $HOME (/.gunicorn).
+            - name: HOME
+              value: /tmp
           securityContext:
             readOnlyRootFilesystem: true
             allowPrivilegeEscalation: false
