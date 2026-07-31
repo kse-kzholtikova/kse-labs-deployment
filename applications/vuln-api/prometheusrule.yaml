@@ -1,0 +1,30 @@
+apiVersion: monitoring.coreos.com/v1
+kind: PrometheusRule
+metadata:
+  name: vuln-api-attacks
+  namespace: applications
+  labels:
+    # this label is what the lab Prometheus selects rules by
+    release: kube-prometheus-stack
+spec:
+  groups:
+    - name: vuln-api.attack-indicators
+      rules:
+        - alert: ApiAuthFailureSpike
+          expr: sum(rate(api_auth_failures_total[1m])) > 0.2
+          for: 1m
+          labels: { severity: warning }
+          annotations:
+            summary: "Auth failures spiking on vuln-api (possible credential/token abuse)"
+        - alert: ApiPrivilegeEscalation
+          expr: increase(api_privilege_escalation_total[5m]) > 0
+          for: 0m
+          labels: { severity: critical }
+          annotations:
+            summary: "A caller changed a privileged field on itself (mass-assignment exploit)"
+        - alert: ApiBolaProbing
+          expr: increase(api_bola_crossuser_total[5m]) > 5
+          for: 0m
+          labels: { severity: warning }
+          annotations:
+            summary: "One or more callers reaching for objects they do not own (BOLA probing)"
