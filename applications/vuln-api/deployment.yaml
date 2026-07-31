@@ -26,7 +26,7 @@ spec:
       containers:
         - name: vuln-api
           # CI (vuln-api repo) builds this tag; bump it to redeploy a new build.
-          image: ghcr.io/kse-bd8338bbe006/vuln-api:9cdffc1348a82a2e163ace9d7ed87a0ffaf642e5
+          image: ghcr.io/kse-kzholtikova/vuln-api:35a3abc6f7fd73b6be1fd6b2005344090941906b
           ports:
             - name: http
               containerPort: 8000
@@ -38,6 +38,13 @@ spec:
               value: "false"
             - name: KEYCLOAK_ISSUER_URI
               value: https://keycloak.192.168.50.10.nip.io/realms/api-security
+            # Multipass qemu mis-virtualizes an ARMv9 instruction OpenSSL selects
+            # at runtime -> SIGILL for Python+cryptography (JWKS in secure mode).
+            - name: OPENSSL_armcap
+              value: "0"
+            # Read-only root FS; point gunicorn's control socket at /tmp emptyDir.
+            - name: HOME
+              value: /tmp
           securityContext:
             readOnlyRootFilesystem: true
             allowPrivilegeEscalation: false
